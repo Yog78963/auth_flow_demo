@@ -1,0 +1,37 @@
+import 'package:auth_flow_demo/features/auth/domain/entity/user_entity.dart';
+import 'package:equatable/equatable.dart';
+
+abstract class AuthState extends Equatable {
+  @override
+  List<Object?> get props => [];
+}
+
+class AuthInitial extends AuthState {}
+
+class AuthLoading extends AuthState {}
+
+class AuthAuthenticated extends AuthState {
+  final UserEntity userEntity;
+
+  AuthAuthenticated({required this.userEntity});
+
+  @override
+  List<Object> get props => [userEntity];
+}
+
+class AuthUnauthenticated extends AuthState {
+  // TODO: Delete the code below after making the AuthUnauthenticated state work properly
+  AuthUnauthenticated() {
+    print("User unauthenticated");
+
+  }
+}
+
+class AuthError extends AuthState {
+  final String message;
+
+  AuthError({required this.message});
+
+  @override
+  List<Object> get props => [message];
+}

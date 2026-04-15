@@ -1,0 +1,26 @@
+import 'package:auth_flow_demo/core/error/exceptions.dart';
+import 'package:auth_flow_demo/features/auth/data/models/user_model.dart';
+
+abstract class AuthRemoteDataSource {
+  Future<UserModel> login(String email, String password);
+  Future<void> logout();
+}
+
+class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
+  @override
+  Future<UserModel> login(String email, String password) async {
+
+    await Future.delayed(Duration(seconds: 1));
+
+    if(email == 'test@test.com' && password == '123456') {
+      return UserModel(id: '1', name: 'Test User', email: 'test@test.com');
+    } else {
+      throw InvalidCredentialsException();
+    }
+  }
+
+  @override
+  Future<void> logout() async {
+    await Future.delayed(Duration(milliseconds: 500));
+  }
+}
