@@ -16,7 +16,7 @@ class AuthRepositoryImpl implements AuthRepository {
   });
 
   @override
-  Future<Either<Failure, UserEntity?>> getCurrentUser() async{
+  Future<Either<Failure, UserEntity?>> getCurrentUser() async {
     try {
       final user = await authLocalDataSource.getCachedUser();
       return Right(user);
@@ -26,7 +26,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> isAuthenticated() async{
+  Future<Either<Failure, bool>> isAuthenticated() async {
     try {
       final token = await authLocalDataSource.getCachedToken();
       return Right(token != null);
@@ -37,28 +37,25 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<Either<Failure, UserEntity>> login({
-      required String email, 
-      required String password,
-    }) async {
-    try{
+    required String email,
+    required String password,
+  }) async {
+    try {
       final user = await authRemoteDataSource.login(email, password);
       await authLocalDataSource.cacheToken('mock_token_${user.id}');
       await authLocalDataSource.cacheUser(user);
       return Right(user);
-    } 
-    on InvalidCredentialsException {
-      return Left(InvalidcredentialsFailure());
-    } 
-    on ServerException {
+    } on InvalidCredentialsException {
+      return Left(InvalidCredentialsFailure());
+    } on ServerException {
       return Left(ServerFailure());
-    } 
-    catch (e) {
+    } catch (e) {
       return Left(ServerFailure());
     }
   }
 
   @override
-  Future<Either<Failure, void>> logout() async{
+  Future<Either<Failure, void>> logout() async {
     try {
       await authRemoteDataSource.logout();
       await authLocalDataSource.clearToken();

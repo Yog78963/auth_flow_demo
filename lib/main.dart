@@ -1,11 +1,11 @@
 import 'package:auth_flow_demo/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:auth_flow_demo/router.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'injection_container.dart' as di;
 
-void main () async{
+void main () async {
   WidgetsFlutterBinding.ensureInitialized();
   await di.init();
 
@@ -13,12 +13,12 @@ void main () async{
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({super.key});
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => di.sl<AuthBloc>(), 
+      create: (_) => di.sl<AuthBloc>(),
       child: Builder(builder: (context) {
         final authBloc = context.read<AuthBloc>();
         final appRouter = AppRouter(authBloc: authBloc);

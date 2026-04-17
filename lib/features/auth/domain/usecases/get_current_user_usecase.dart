@@ -4,7 +4,7 @@ import 'package:auth_flow_demo/features/auth/domain/entity/user_entity.dart';
 import 'package:auth_flow_demo/features/auth/domain/repository/auth_repository.dart';
 import 'package:dartz/dartz.dart';
 
-class GetCurrentUserUseCase implements Usecase<UserEntity?, NoParams> {
+class GetCurrentUserUseCase implements UseCase<UserEntity?,NoParams>{
   final AuthRepository repository;
 
   GetCurrentUserUseCase({required this.repository});

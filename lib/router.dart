@@ -5,7 +5,7 @@ import 'package:auth_flow_demo/features/auth/presentation/bloc/auth_state.dart';
 import 'package:auth_flow_demo/features/auth/presentation/pages/home_page.dart';
 import 'package:auth_flow_demo/features/auth/presentation/pages/login_page.dart';
 import 'package:auth_flow_demo/features/auth/presentation/pages/splash_page.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 
 class AppRouter {
@@ -15,56 +15,51 @@ class AppRouter {
 
   GoRouter get router => GoRouter(
     initialLocation: '/splash',
-    refreshListenable: GoRouteRefreshStream(authBloc.stream),
+    refreshListenable: GoRouterRefreshStream(authBloc.stream),
     redirect: (context, state) {
       final authState = authBloc.state;
 
       final isGoingToLogin = state.matchedLocation == '/login';
       final isGoingToSplash = state.matchedLocation == '/splash';
 
-      // if(authState is AuthUnauthenticated || authState is AuthError) {
-      //   isGoingToLogin ? null : '/login';
-      // } 
-      // if(authState is AuthAuthenticated) {
-      //   if(isGoingToLogin || isGoingToSplash){
-      //     return '/home';
-      //   }
-      // }
-      // return null;
-      return '/splash';
+      if (authState is AuthUnauthenticated || authState is AuthError) {
+        return isGoingToLogin ? null : '/login';
+      }
+      if (authState is AuthAuthenticated) {
+        if (isGoingToLogin || isGoingToSplash) {
+          return '/home';
+        }
+      }
+      return null;
     },
     routes: [
       GoRoute(
         path: '/splash',
-        builder: (context, state){
-          return const SplashPage();
+        builder: (context, state) {
+          return SplashPage();
         },
       ),
       GoRoute(
         path: '/login',
         builder: (context, state) {
-          return const LoginPage();
-        }
+          return LoginPage();
+        },
       ),
       GoRoute(
         path: '/home',
         builder: (context, state) {
-          return const HomePage();
-        }
+          return HomePage();
+        },
       ),
     ],
-
   );
-
 }
 
-class GoRouteRefreshStream extends ChangeNotifier {
-
-  GoRouteRefreshStream(Stream stream) {
+class GoRouterRefreshStream extends ChangeNotifier {
+  GoRouterRefreshStream(Stream stream) {
     notifyListeners();
     _subscription = stream.asBroadcastStream().listen((_) => notifyListeners());
   }
 
   late final StreamSubscription _subscription;
-
 }

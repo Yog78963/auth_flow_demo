@@ -5,9 +5,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class AuthLocalDataSource {
   Future<void> cacheToken(String token);
+
   Future<String?> getCachedToken();
+
   Future<void> clearToken();
+
   Future<void> cacheUser(UserModel user);
+
   Future<UserModel?> getCachedUser();
 }
 
@@ -24,7 +28,7 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
   }
 
   @override
-  Future<void> cacheUser(UserModel user) async {
+  Future<void> cacheUser(UserModel user) async  {
     await sharedPreferences.setString(cachedUser, json.encode(user.toJson()));
   }
 
@@ -42,11 +46,10 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
   @override
   Future<UserModel?> getCachedUser() async {
     final jsonString = sharedPreferences.getString(cachedUser);
-    
-    if (jsonString != null) {
+
+    if(jsonString!=null){
       return UserModel.fromJson(json.decode(jsonString));
     }
-    
     return null;
   }
 }

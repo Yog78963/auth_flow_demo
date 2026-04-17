@@ -2,10 +2,10 @@ import 'package:auth_flow_demo/features/auth/data/datasources/auth_local_datasou
 import 'package:auth_flow_demo/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:auth_flow_demo/features/auth/data/repository/auth_repository_impl.dart';
 import 'package:auth_flow_demo/features/auth/domain/repository/auth_repository.dart';
+import 'package:auth_flow_demo/features/auth/domain/usecases/check_auth_usecase.dart';
 import 'package:auth_flow_demo/features/auth/domain/usecases/get_current_user_usecase.dart';
 import 'package:auth_flow_demo/features/auth/domain/usecases/login_usecase.dart';
 import 'package:auth_flow_demo/features/auth/domain/usecases/logout_usecase.dart';
-import 'package:auth_flow_demo/features/auth/domain/usecases/check_auth_usecase.dart';
 import 'package:auth_flow_demo/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,9 +15,9 @@ final sl = GetIt.instance;
 Future init() async {
   sl.registerFactory(
     () => AuthBloc(
-      loginUseCase: sl(), 
-      logoutUseCase: sl(), 
-      getCurrentUserUseCase: sl(), 
+      loginUseCase: sl(),
+      logoutUseCase: sl(),
+      getCurrentUserUseCase: sl(),
       checkAuthUseCase: sl(),
     ),
   );
@@ -39,6 +39,4 @@ Future init() async {
 
   final sharedPreferences = await SharedPreferences.getInstance();
   sl.registerLazySingleton(() => sharedPreferences);
-
-
 }

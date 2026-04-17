@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auth_flow_demo/core/error/failures.dart';
 import 'package:auth_flow_demo/core/usecases/usecase.dart';
 import 'package:auth_flow_demo/features/auth/domain/usecases/check_auth_usecase.dart';
@@ -26,80 +28,71 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Future _onAuthCheckRequested(
-      AuthCheckRequested event, Emitter<AuthState> emit) async {
+    AuthCheckRequested event,
+    Emitter<AuthState> emit,
+  ) async {
     emit(AuthLoading());
     final result = await checkAuthUseCase(NoParams());
 
     await result.fold(
-      (left){
-        print("left");
+      (left) {
         emit(AuthUnauthenticated());
-      }, 
+      },
       (right) async {
-        print("right");
         if (right) {
           final userResult = await getCurrentUserUseCase(NoParams());
           await userResult.fold(
             (l) {
-              print("right 1");
               emit(AuthUnauthenticated());
-            }, 
+            },
             (r) {
-              print("right 2");
-              if(r != null){
+              if (r != null) {
                 emit(AuthAuthenticated(userEntity: r));
               } else {
                 emit(AuthUnauthenticated());
               }
             },
           );
-        }
-        else {
-          print("right else");
+        } else {
           emit(AuthUnauthenticated());
         }
-    });
+      },
+    );
   }
 
   Future _onAuthLoginRequested(
-      AuthLoginRequested event, Emitter<AuthState> emit) async {
+    AuthLoginRequested event,
+    Emitter<AuthState> emit,
+  ) async {
     emit(AuthLoading());
-    
+
     final result = await loginUseCase(
       LoginParams(email: event.email, password: event.password),
     );
 
-    result.fold(
-      (l) {
-        String message = "Auth error";
-        if(l is InvalidcredentialsFailure){
-          message = "Wrong email or password";
-        }
-        else if(l is ServerFailure){
-          message = "Server failure";
-        }
-        emit(AuthError(message: message));
-      },
-      (r) {
-        emit(AuthAuthenticated(userEntity: r));
-      },
-    );
+    result.fold((l){
+      String message = 'Auth error';
+      if(l is InvalidCredentialsFailure){
+        message = 'Wrong email or password';
+      }
+      else if(l is ServerFailure){
+        message = 'Server failure';
+      }
+      emit(AuthError(message: message));
+    }, (r){
+      emit(AuthAuthenticated(userEntity: r));
+    });
   }
 
-  Future _onAuthLogoutRequested(
-      AuthLogoutRequested event, Emitter<AuthState> emit) async {
+  Future _onAuthLogoutRequested(AuthLogoutRequested event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
 
     final result = await logoutUseCase(NoParams());
 
-    result.fold(
-      (l) {
-        emit(AuthError(message: "Logout error"));
-      },
-      (r) {
-        emit(AuthUnauthenticated());
-      },
-    );
+    result.fold((l){
+      emit(AuthError(message: 'Logout error'));
+    }, (r){
+      emit(AuthUnauthenticated());
+    });
   }
-
 }

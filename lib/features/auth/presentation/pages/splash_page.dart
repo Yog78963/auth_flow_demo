@@ -17,10 +17,9 @@ class _SplashPageState extends State<SplashPage> {
     super.initState();
     context.read<AuthBloc>().add(AuthCheckRequested());
   }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: Center(
         child: CircularProgressIndicator(),
       ),

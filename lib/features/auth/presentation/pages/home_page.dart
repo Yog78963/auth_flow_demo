@@ -12,45 +12,39 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Home'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.logout),
-            onPressed: () {
-              context.read<AuthBloc>().add(AuthLogoutRequested());
-            },
-          )
-        ],
+        actions: [IconButton(onPressed: (){
+          context.read<AuthBloc>().add(AuthLogoutRequested());
+        }, icon: Icon(Icons.logout))],
+
       ),
-      body: BlocBuilder<AuthBloc, AuthState>(
-        builder: (context, state) {
-          if(state is AuthAuthenticated) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.check_circle_outline, 
-                    size: 100,
-                    color: Colors.green
-                  ),
-                  SizedBox(height: 24),
-                  Text('Welcome', style: TextStyle(
-                    fontSize: 28, 
-                    fontWeight: FontWeight.bold
-                  )),
-                  SizedBox(height: 16),
-                  Text('Email: ${state.userEntity.email}'),
-                  SizedBox(height: 16),
-                  Text('Name: ${state.userEntity.name}'),
-                ],
-              ),
-            );
-          }
+      body: BlocBuilder<AuthBloc,AuthState>(builder: (context,state){
+        if(state is AuthAuthenticated){
           return Center(
-            child: CircularProgressIndicator(),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.check_circle_outline,
+                  size: 100,
+                  color: Colors.green,
+                ),
+                SizedBox(height: 24,),
+                Text('Welcome',style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                ),),
+                SizedBox(height: 16,),
+                Text('Email: ${state.userEntity.email}'),
+                SizedBox(height: 16,),
+                Text('Name: ${state.userEntity.name}'),
+              ],
+            ),
           );
-        },
-      ),
+        }
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      })
     );
   }
 }

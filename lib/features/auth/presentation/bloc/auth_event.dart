@@ -17,4 +17,6 @@ class AuthLoginRequested extends AuthEvent {
   List<Object?> get props => [email, password];
 }
 
-class AuthLogoutRequested extends AuthEvent {}
+class AuthLogoutRequested extends AuthEvent{
+
+}

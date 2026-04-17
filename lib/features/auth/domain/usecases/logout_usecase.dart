@@ -3,7 +3,7 @@ import 'package:auth_flow_demo/core/usecases/usecase.dart';
 import 'package:auth_flow_demo/features/auth/domain/repository/auth_repository.dart';
 import 'package:dartz/dartz.dart';
 
-class LogoutUseCase implements Usecase<void, NoParams> {
+class LogoutUseCase implements UseCase<void,NoParams>{
   final AuthRepository repository;
 
   LogoutUseCase({required this.repository});

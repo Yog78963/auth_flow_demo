@@ -3,7 +3,7 @@ import 'package:auth_flow_demo/core/usecases/usecase.dart';
 import 'package:auth_flow_demo/features/auth/domain/repository/auth_repository.dart';
 import 'package:dartz/dartz.dart';
 
-class CheckAuthUseCase implements Usecase<bool, NoParams> {
+class CheckAuthUseCase implements UseCase<bool,NoParams>{
   final AuthRepository repository;
 
   CheckAuthUseCase({required this.repository});
